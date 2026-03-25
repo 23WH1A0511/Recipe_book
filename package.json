@@ -1,0 +1,9 @@
+{
+  "name": "fsd-recipe",
+  "private": true,
+  "scripts": {
+    "backend": "cmd /c \"cd /d backend && npm.cmd start\"",
+    "frontend": "cmd /c \"cd /d frontend && npm.cmd start\"",
+    "dev": "cmd /c \"start \\\"Recipe Backend\\\" cmd /k \\\"cd /d backend && npm.cmd start\\\" && start \\\"Recipe Frontend\\\" cmd /k \\\"cd /d frontend && npm.cmd start\\\"\""
+  }
+}
