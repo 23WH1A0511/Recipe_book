@@ -1,104 +1,107 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "../services/api";
+import "../App.css";
 
-function EditRecipe() {
+const EditRecipe = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-  });
-  const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [title, setTitle] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [recipeType, setRecipeType] = useState("");
+  const [ingredients, setIngredients] = useState("");
+  const [steps, setSteps] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setLoading(true);
+    const fetchRecipe = async () => {
+      const res = await API.get("/recipes");
+      const recipe = res.data.find((item) => item._id === id);
 
-    API.get(`/recipes/${id}`)
-      .then((res) => {
-        setFormData({
-          title: res.data?.title || "",
-          description: res.data?.description || "",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        setStatus("Could not load recipe data.");
-      })
-      .finally(() => setLoading(false));
+      if (recipe) {
+        setTitle(recipe.title);
+        setImageUrl(recipe.imageUrl || "");
+        setRecipeType(recipe.recipeType || "");
+        setIngredients(recipe.ingredients);
+        setSteps(recipe.instructions);
+      }
+    };
+
+    fetchRecipe();
   }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((current) => ({ ...current, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    setStatus("");
+    setError("");
+
+    if (!recipeType) {
+      setError("Please select a recipe type.");
+      return;
+    }
 
     try {
-      await API.put(`/recipes/${id}`, formData);
-      setStatus("Recipe updated successfully.");
-      setTimeout(() => navigate("/admin"), 700);
+      await API.put(`/recipes/${id}`, {
+        title,
+        imageUrl,
+        recipeType,
+        ingredients,
+        instructions: steps,
+      });
+
+      navigate("/recipes");
     } catch (err) {
-      console.log(err);
-      setStatus("Could not update the recipe.");
-    } finally {
-      setSubmitting(false);
+      setError(err.response?.data?.message || "Error updating recipe.");
     }
   };
 
-  if (loading) {
-    return <div className="status-card">Loading edit form...</div>;
-  }
-
   return (
-    <div className="auth-layout">
-      <section className="auth-copy">
-        <span className="eyebrow">Admin Interface</span>
-        <h1>Update a recipe shared with users.</h1>
-        <p>Admin can edit recipe information here and keep the recipe collection up to date.</p>
-      </section>
+    <section className="page-stack page-shell">
+      <div className="section-heading">
+        <div>
+          <span className="eyebrow">Admin</span>
+          <h2>Edit recipe</h2>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit} className="auth-card">
-        <h2>Edit Recipe</h2>
-
-        <label className="field-label" htmlFor="edit-title">
-          Recipe Title
+      <form className="form-card recipe-form" onSubmit={handleUpdate}>
+        <label className="field">
+          <span>Title</span>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} />
         </label>
-        <input
-          id="edit-title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="field-input"
-          required
-        />
 
-        <label className="field-label" htmlFor="edit-description">
-          Description
+        <label className="field">
+          <span>Image URL</span>
+          <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
         </label>
-        <textarea
-          id="edit-description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          className="field-input field-input--textarea"
-          required
-        />
 
-        {status ? <p className="form-status">{status}</p> : null}
+        <label className="field">
+          <span>Recipe Type</span>
+          <select value={recipeType} onChange={(e) => setRecipeType(e.target.value)}>
+            <option value="">Select type</option>
+            <option value="veg">Veg</option>
+            <option value="non-veg">Non-Veg</option>
+            <option value="bakery">Bakery</option>
+          </select>
+        </label>
 
-        <button type="submit" className="primary-button primary-button--full" disabled={submitting}>
-          {submitting ? "Updating..." : "Update Recipe"}
+        <label className="field">
+          <span>Ingredients</span>
+          <textarea value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
+        </label>
+
+        <label className="field">
+          <span>Steps</span>
+          <textarea value={steps} onChange={(e) => setSteps(e.target.value)} />
+        </label>
+
+        {error ? <div className="status-card status-card--error">{error}</div> : null}
+
+        <button className="button button-primary" type="submit">
+          Update Recipe
         </button>
       </form>
-    </div>
+    </section>
   );
-}
+};
 
 export default EditRecipe;

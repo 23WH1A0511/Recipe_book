@@ -1,87 +1,106 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import "../App.css";
 
-function AddRecipe() {
+const AddRecipe = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-  });
-  const [status, setStatus] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((current) => ({ ...current, [name]: value }));
-  };
+  const [title, setTitle] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [recipeType, setRecipeType] = useState("");
+  const [ingredients, setIngredients] = useState("");
+  const [steps, setSteps] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    setStatus("");
+    setError("");
+
+    if (!recipeType) {
+      setError("Please select a recipe type.");
+      return;
+    }
 
     try {
-      await API.post("/recipes", formData);
-      setStatus("Recipe added successfully.");
-      setFormData({ title: "", description: "" });
-      setTimeout(() => navigate("/admin"), 700);
+      await API.post("/recipes", {
+        title,
+        imageUrl,
+        recipeType,
+        ingredients,
+        instructions: steps,
+        createdBy: "admin",
+      });
+
+      navigate("/recipes");
     } catch (err) {
-      console.log(err);
-      setStatus("Could not add recipe. Please try again.");
-    } finally {
-      setSubmitting(false);
+      setError(err.response?.data?.message || "Error adding recipe.");
     }
   };
 
   return (
-    <div className="auth-layout">
-      <section className="auth-copy">
-        <span className="eyebrow">Admin Interface</span>
-        <h1>Add a new recipe for all users.</h1>
-        <p>
-          Recipes created here become part of the shared recipe collection that users can access
-          from their recipes page.
-        </p>
-      </section>
+    <section className="page-stack page-shell">
+      <div className="section-heading">
+        <div>
+          <span className="eyebrow">Admin</span>
+          <h2>Add a new recipe</h2>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit} className="auth-card">
-        <h2>Add Recipe</h2>
-
-        <label className="field-label" htmlFor="title">
-          Recipe Title
+      <form className="form-card recipe-form" onSubmit={handleSubmit}>
+        <label className="field">
+          <span>Title</span>
+          <input
+            placeholder="Recipe title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </label>
-        <input
-          id="title"
-          name="title"
-          value={formData.title}
-          placeholder="Paneer Butter Masala"
-          onChange={handleChange}
-          className="field-input"
-          required
-        />
 
-        <label className="field-label" htmlFor="description">
-          Description
+        <label className="field">
+          <span>Image URL</span>
+          <input
+            placeholder="Paste recipe image URL"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
         </label>
-        <textarea
-          id="description"
-          name="description"
-          value={formData.description}
-          placeholder="A rich and creamy curry perfect for dinner."
-          onChange={handleChange}
-          className="field-input field-input--textarea"
-          required
-        />
 
-        {status ? <p className="form-status">{status}</p> : null}
+        <label className="field">
+          <span>Recipe Type</span>
+          <select value={recipeType} onChange={(e) => setRecipeType(e.target.value)}>
+            <option value="">Select type</option>
+            <option value="veg">Veg</option>
+            <option value="non-veg">Non-Veg</option>
+            <option value="bakery">Bakery</option>
+          </select>
+        </label>
 
-        <button type="submit" className="primary-button primary-button--full" disabled={submitting}>
-          {submitting ? "Saving..." : "Add Recipe"}
+        <label className="field">
+          <span>Ingredients</span>
+          <textarea
+            placeholder="List ingredients"
+            value={ingredients}
+            onChange={(e) => setIngredients(e.target.value)}
+          />
+        </label>
+
+        <label className="field">
+          <span>Steps</span>
+          <textarea
+            placeholder="Write cooking steps"
+            value={steps}
+            onChange={(e) => setSteps(e.target.value)}
+          />
+        </label>
+
+        {error ? <div className="status-card status-card--error">{error}</div> : null}
+
+        <button className="button button-primary" type="submit">
+          Add Recipe
         </button>
       </form>
-    </div>
+    </section>
   );
-}
+};
 
 export default AddRecipe;

@@ -1,113 +1,102 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
+import "../App.css";
 
-function Register() {
+const Register = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [status, setStatus] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((current) => ({ ...current, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    setStatus("");
+    setLoading(true);
+    setError("");
 
     try {
-      await API.post("/users/register", { ...formData, role: "user" });
-      setStatus("Account created successfully. Redirecting to login...");
-      setFormData({ name: "", email: "", password: "" });
-      setTimeout(() => navigate("/login"), 900);
+      await API.post("/users/register", {
+        name,
+        email,
+        password,
+        role,
+      });
+
+      navigate("/login", {
+        replace: true,
+        state: {
+          registeredEmail: email,
+          justRegistered: true,
+        },
+      });
     } catch (err) {
-      console.log(err);
-      if (!err.response) {
-        setStatus("Cannot connect to the backend server. Make sure backend is running on http://localhost:5000.");
-      } else {
-        setStatus(err.response?.data?.message || "Registration failed. Please try again.");
-      }
+      setError(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-layout">
-      <section className="auth-copy">
-        <span className="eyebrow">User Registration</span>
-        <h1>Create a user account before logging in.</h1>
-        <p>
-          This registration form is for website users. Admin accounts are expected to be managed
-          separately through your backend setup.
-        </p>
-      </section>
+    <section className="auth-shell auth-shell-centered">
+      <form className="auth-panel form-card auth-form-centered" onSubmit={handleRegister}>
+        <div className="form-heading">
+          <span className="eyebrow">Register</span>
+          <h2>Set up your profile</h2>
+          <p>Use a clear role and start managing recipes right away.</p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="auth-card">
-        <h2>Create User Account</h2>
-
-        <label className="field-label" htmlFor="register-name">
-          Name
+        <label className="field">
+          <span>Name</span>
+          <input
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </label>
-        <input
-          id="register-name"
-          name="name"
-          value={formData.name}
-          placeholder="Your name"
-          onChange={handleChange}
-          className="field-input"
-          required
-        />
 
-        <label className="field-label" htmlFor="register-email">
-          Email
+        <label className="field">
+          <span>Email</span>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </label>
-        <input
-          id="register-email"
-          name="email"
-          value={formData.email}
-          placeholder="you@example.com"
-          onChange={handleChange}
-          className="field-input"
-          required
-        />
 
-        <label className="field-label" htmlFor="register-password">
-          Password
+        <label className="field">
+          <span>Password</span>
+          <input
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </label>
-        <input
-          id="register-password"
-          name="password"
-          value={formData.password}
-          placeholder="Create password"
-          type="password"
-          onChange={handleChange}
-          className="field-input"
-          required
-        />
 
-        {status ? <p className="form-status">{status}</p> : null}
+        <label className="field">
+          <span>Role</span>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
 
-        <button type="submit" className="primary-button primary-button--full" disabled={submitting}>
-          {submitting ? "Creating Account..." : "Register"}
+        {error ? <div className="status-card status-card--error">{error}</div> : null}
+
+        <button className="button button-primary button-block" type="submit" disabled={loading}>
+          {loading ? "Creating account..." : "Register"}
         </button>
 
-        <p className="helper-copy">
-          Already registered?{" "}
-          <Link to="/login" className="text-link">
-            Login
-          </Link>
+        <p className="form-footnote">
+          Already registered? <Link to="/login">Go to login</Link>
         </p>
       </form>
-    </div>
+    </section>
   );
-}
+};
 
 export default Register;

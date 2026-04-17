@@ -9,11 +9,30 @@ export function normalizeAuthPayload(payload, selectedRole = "user") {
   const token = payload.token || payload.data?.token || "";
   const role = user?.role || payload.role || selectedRole;
 
+  const normalizedRole = role === "admin" ? "admin" : "user";
+  const name =
+    user?.name || payload.name || (normalizedRole === "admin" ? "Admin" : "User");
+  const email = user?.email || payload.email || "";
+  const id = user?._id || payload._id || payload.id || "";
+  const favorites = Array.isArray(user?.favorites)
+    ? user.favorites
+    : Array.isArray(payload.favorites)
+      ? payload.favorites
+      : [];
+
   return {
     token,
-    role: role === "admin" ? "admin" : "user",
-    name: user?.name || payload.name || (role === "admin" ? "Admin" : "User"),
-    email: user?.email || payload.email || "",
+    _id: id,
+    role: normalizedRole,
+    name,
+    email,
+    user: {
+      _id: id,
+      name,
+      email,
+      role: normalizedRole,
+      favorites,
+    },
   };
 }
 
@@ -28,7 +47,31 @@ export function getStoredAuth() {
 }
 
 export function storeAuth(auth) {
-  localStorage.setItem(AUTH_KEY, JSON.stringify(auth));
+  const normalized = normalizeAuthPayload(auth);
+  localStorage.setItem(AUTH_KEY, JSON.stringify(normalized));
+}
+
+export function updateStoredAuthUser(nextUser) {
+  const currentAuth = getStoredAuth();
+
+  if (!currentAuth) {
+    return null;
+  }
+
+  const mergedAuth = {
+    ...currentAuth,
+    ...("email" in nextUser ? { email: nextUser.email } : {}),
+    ...("name" in nextUser ? { name: nextUser.name } : {}),
+    ...("_id" in nextUser ? { _id: nextUser._id } : {}),
+    ...("role" in nextUser ? { role: nextUser.role } : {}),
+    user: {
+      ...currentAuth.user,
+      ...nextUser,
+    },
+  };
+
+  localStorage.setItem(AUTH_KEY, JSON.stringify(mergedAuth));
+  return mergedAuth;
 }
 
 export function clearAuth() {

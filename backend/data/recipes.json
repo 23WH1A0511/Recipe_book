@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Paneer Butter Masala",
+    "ingredients": "Paneer, butter, tomato, onion, spices",
+    "instructions": "Cook onion and tomato, add spices, then simmer paneer in the gravy.",
+    "recipeType": "veg",
+    "createdBy": "admin@gmail.com"
+  },
+  {
+    "title": "Chicken Biryani",
+    "ingredients": "Chicken, rice, curd, mint, masala",
+    "instructions": "Marinate chicken, layer with rice, and cook on dum.",
+    "recipeType": "non-veg",
+    "createdBy": "admin@gmail.com"
+  },
+  {
+    "title": "Chocolate Cake",
+    "ingredients": "Flour, cocoa powder, sugar, butter, eggs",
+    "instructions": "Prepare batter, pour into a tin, and bake until done.",
+    "recipeType": "bakery",
+    "createdBy": "admin@gmail.com"
+  }
+]

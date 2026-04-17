@@ -16,6 +16,30 @@ const recipeSchema = new mongoose.Schema({
     required: true
   },
 
+  imageUrl: {
+    type: String,
+    default: ""
+  },
+
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+    default: 0
+  },
+
+  ratingCount: {
+    type: Number,
+    min: 0,
+    default: 0
+  },
+
+  recipeType: {
+    type: String,
+    enum: ["veg", "non-veg", "bakery", ""],
+    default: ""
+  },
+
   createdBy: {
     type: String
   }
