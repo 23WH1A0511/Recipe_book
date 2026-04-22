@@ -1,132 +1,201 @@
-# Recipe_book
+# 🍲 Recipe Book Web Application
 
-# 📘 Project Name
-
-**Recipe Book Management System – MERN Stack**
-
----
-
-## 1. Project Overview
-
-The **Recipe Book Management System** is a full-stack web application developed using the **MERN stack** to digitally store, manage, and organize cooking recipes. The system allows users to view recipes, while an admin can add, update, and delete recipes.
-
-This application helps users easily access recipe information such as ingredients, preparation steps, and cooking time. It demonstrates real-world full-stack development using **React for frontend**, **Node.js and Express.js for backend**, and **MongoDB for database management**.
+A full-stack **Recipe Book Application** built using **React.js** for the frontend and **Node.js + Express + MongoDB** for the backend.
+This application allows users to browse recipes, manage favorites, and provides admin controls for managing content.
 
 ---
 
-## Project Demo
-[click here to watch the demo](https://drive.google.com/file/d/1hqo56V_X-kAte9D5QuEX3mPHdZ-lSQ3u/view?usp=sharing)
+## 🚀 Features
 
-## 2. Users of the System
+### 👤 User Features
 
-### • Admin
+* 🔐 User Registration & Login
+* 🍽️ Browse all recipes
+* 🔍 View detailed recipe information
+* ❤️ Add/remove recipes to Favorites
+* 📄 Manage personal favorite recipes
 
-* Secure login
-* Add new recipes
-* Edit existing recipes
-* Delete recipes
-* Manage all recipe data
+### 🛠️ Admin Features
 
-### • User (Viewer)
-
-* View available recipes
-* Search and browse recipes
-* Read recipe details (ingredients & steps)
-
-*(This satisfies the requirement of **minimum 2 user sets**)*
+* 📝 Add new recipes
+* ✏️ Edit existing recipes
+* ❌ Delete recipes
+* 👥 Manage users
 
 ---
 
-## 3. Key Features (CRUD Operations Included)
+## 🛠️ Tech Stack
 
-• Secure login system for admin
-• Add new recipes (Create)
-• View all recipes (Read)
-• Edit recipe details (Update)
-• Delete recipes (Delete)
-• Role-based access (Admin / User)
-• RESTful API integration
+### Frontend
 
----
+* ⚛️ React.js
+* 🎨 CSS
+* 📦 Axios
 
-## 4. Pages (3–6 Pages Requirement Met)
+### Backend
 
-• Login Page
-• Home Page
-• Recipe List Page
-• Add Recipe Page (Admin)
-• Edit Recipe Page (Admin)
-• Recipe Details Page
+* 🟢 Node.js
+* 🚀 Express.js
+* 🗄️ MongoDB (Mongoose)
 
 ---
 
-## 5. Technology Stack
+## 📂 Project Structure
 
-• **Frontend:** React.js, React Router, Axios
-• **UI Styling:** CSS / Bootstrap
-• **Backend:** Node.js with Express.js
-• **Database:** MongoDB
-• **ODM:** Mongoose
-• **API Architecture:** RESTful APIs
-• **Tools:** VS Code, MongoDB Compass
-
----
-
-## 6. Database Design
-
-• **User Collection:**
-
-* Name
-* Email
-* Password
-* Role (Admin/User)
-
-• **Recipe Collection:**
-
-* Recipe Name
-* Ingredients
-* Preparation Steps
-* Cooking Time
-* Category
-* Created Date
+```bash
+Recipe_book/
+│── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/api.js
+│   │   ├── utils/
+│   │   ├── App.js
+│   │   └── index.js
+│
+│── backend/
+│   ├── src/
+│   │   ├── config/db.js
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   └── server.js
+│
+│── README.md
+```
 
 ---
 
-## 7. System Workflow
+## ⚙️ Installation & Setup
 
-• Admin logs into the system
-• Admin adds new recipes to the database
-• Recipes are stored in MongoDB
-• Users access the application
-• Users view and browse available recipes
-• Admin can update or delete recipes when required
+### 1️⃣ Clone the Repository
 
----
-
-## 8. Advantages
-
-• Easy digital storage of recipes
-• Saves time compared to manual recipe management
-• User-friendly interface
-• Organized and structured recipe data
-• Scalable and extendable system
-• Real-world MERN stack implementation
+```bash
+git clone https://github.com/23WH1A0511/Recipe_book.git
+cd Recipe_book
+```
 
 ---
 
-## 9. Future Enhancements
+## 🔧 Backend Setup
 
-• User registration and profile management
-• Recipe image upload feature
-• Favorite recipes option
-• Search and filter by category
-• Comment and rating system
-• Mobile application support
+```bash
+cd backend
+npm install
+```
+
+### ▶️ Run Backend
+
+```bash
+npm start
+```
+
+or
+
+```bash
+npm run dev
+```
+
+Backend runs on:
+👉 [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 10. Conclusion
+## 💻 Frontend Setup
 
-The **Recipe Book Management System** is a complete MERN stack application that demonstrates full-stack web development concepts such as **CRUD operations**, **REST APIs**, **database integration**, and **role-based access control**. This project is suitable for academic submission and helps in understanding real-world application development using modern web technologies.
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend runs on:
+👉 [http://localhost:3000](http://localhost:3000)
 
 ---
+
+## 🔑 Environment Variables
+
+Create a `.env` file inside the backend folder:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+```
+
+---
+
+## 🔗 API Endpoints
+
+### 👤 Users
+
+* `POST /api/users/register` → Register user
+* `POST /api/users/login` → Login user
+
+### 🍲 Recipes
+
+* `GET /api/recipes` → Get all recipes
+* `GET /api/recipes/:id` → Get recipe details
+* `POST /api/recipes` → Create recipe
+* `PUT /api/recipes/:id` → Update recipe
+* `DELETE /api/recipes/:id` → Delete recipe
+
+---
+
+## 🎥 Demo Video
+
+👉 Add your demo video link here:
+
+```bash
+https://drive.google.com/file/d/1hqo56V_X-kAte9D5QuEX3mPHdZ-lSQ3u/view?usp=sharing
+```
+
+
+---
+
+## 💡 Usage
+
+1. Start backend server
+2. Start frontend application
+3. Register or login
+4. Browse recipes
+5. Add recipes to favorites
+6. Admin can manage recipes and users
+
+---
+
+## 🔮 Future Enhancements
+
+* 🔐 JWT Authentication
+* 📱 Mobile responsiveness
+* ⭐ Ratings & Reviews system
+* 🔎 Advanced search & filtering
+* ☁️ Deployment (Vercel / AWS / Render)
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Commit your changes
+4. Push and open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 👨‍💻 Author
+
+* GitHub: [https://github.com/23WH1A0511](https://github.com/23WH1A0511)
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
