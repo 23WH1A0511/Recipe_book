@@ -145,8 +145,7 @@ MONGO_URI=your_mongodb_connection_string
 
 ## 🎥 Demo Video
 
-👉 Add your demo video link here:
-[click here to watch the demo](https://drive.google.com/file/d/1hqo56V_X-kAte9D5QuEX3mPHdZ-lSQ3u/view?usp=sharing)
+👉[click here to watch the demo](https://drive.google.com/file/d/1hqo56V_X-kAte9D5QuEX3mPHdZ-lSQ3u/view?usp=sharing)
 
 
 
