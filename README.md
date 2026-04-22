@@ -15,7 +15,7 @@ This application helps users easily access recipe information such as ingredient
 ---
 
 ## Project Demo
-![click here to watch the demo](https://drive.google.com/file/d/1RhAqSK3yVKYN_Ppuby0cTMDBhzhZWlx8/view?usp=sharing)
+[click here to watch the demo](https://drive.google.com/file/d/1RhAqSK3yVKYN_Ppuby0cTMDBhzhZWlx8/view?usp=sharing)
 
 ## 2. Users of the System
 
